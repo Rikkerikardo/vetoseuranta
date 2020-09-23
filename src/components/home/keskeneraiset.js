@@ -1,32 +1,33 @@
-import React from "react"
-import { useSelector } from "react-redux"
-import CircularProgress from "@material-ui/core/CircularProgress"
-import TableWithPages from "./keskeneraisetTable"
+import React from 'react'
+import {useSelector} from 'react-redux'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import TableWithPages from './keskeneraisetTable'
 
 const Keskeneraiset = () => {
   const keskeneraiset = useSelector((state) => state.results.keskeneraiset)
   const keskeneraisetTurnaukset = useSelector(
-    (state) => state.results.keskeneraisetTurnaukset
+      (state) => state.results.keskeneraisetTurnaukset,
   )
   if (!keskeneraiset) return <CircularProgress />
-  if (keskeneraiset.length === 0)
+  if (keskeneraiset.length === 0) {
     return (
       <div>
         <h2
           style={{
-            textAlign: "center"
+            textAlign: 'center',
           }}
         >
           Ei keskeneräisiä
         </h2>
       </div>
     )
+  }
 
   return (
     <div>
       <h2
         style={{
-          textAlign: "center"
+          textAlign: 'center',
         }}
       >
         Keskeneräiset

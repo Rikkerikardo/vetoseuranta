@@ -1,8 +1,8 @@
-import React from "react"
-import { useSelector } from "react-redux"
-import TableWithPages from "./allMatches"
-import Container from "@material-ui/core/Container"
-import CircularProgress from "@material-ui/core/CircularProgress"
+import React from 'react'
+import {useSelector} from 'react-redux'
+import TableWithPages from './allMatches'
+import Container from '@material-ui/core/Container'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const Results = () => {
   const matches = useSelector((state) => state.results.ottelut)
@@ -11,7 +11,7 @@ const Results = () => {
     <Container>
       <h2
         style={{
-          textAlign: "center"
+          textAlign: 'center',
         }}
       >
         Tulokset
