@@ -1,23 +1,29 @@
 import React from "react"
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux"
 import TableWithPages from "./allMatches"
 import Container from "@material-ui/core/Container"
 import CircularProgress from "@material-ui/core/CircularProgress"
 
 const Results = () => {
   const matches = useSelector((state) => state.results.ottelut)
-  if (!matches) return <CircularProgress />
-  return (
-    <Container>
-      <h2
-        style={{
-          textAlign: "center",
-        }}
-      >
-        Tulokset
-      </h2>
-      <TableWithPages table={matches} />
-    </Container>
-  )
+  const user = useSelector((state) => state.user)
+
+  if (user == null) {
+    return <Container align="center">Kirjaudu sisään nähdäksesi tietoja</Container>
+  } else {
+    if (!matches) return <CircularProgress />
+    return (
+      <Container>
+        <h2
+          style={{
+            textAlign: "center",
+          }}
+        >
+          Tulokset
+        </h2>
+        <TableWithPages table={matches} />
+      </Container>
+    )
+  }
 }
 export default Results

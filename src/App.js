@@ -4,6 +4,7 @@ import HomePage from "./components/home/homepage"
 import { useDispatch } from "react-redux"
 import { initializeResults } from "./reducers/ottelut"
 import { initializeKassa } from "./reducers/kassa"
+import { initializeUser } from "./reducers/user"
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
 import Results from "./components/results/resultspage"
 import StatisticsPage from "./components/statistics/statisticspage"
@@ -18,13 +19,15 @@ const App = () => {
   const dispatch = useDispatch()
   const [tulokset, setTulokset] = useState([])
   const [pankki, setPankki] = useState([])
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
       firebase.auth().onAuthStateChanged((loggeduser) => {
         if (loggeduser) {
-          console.log("logged in")
+          console.log("logged in as ", loggeduser.displayName)
           testiAlustus()
+          setUser(loggeduser)
         } else {
           console.log("not logged in")
         }
@@ -41,6 +44,10 @@ const App = () => {
   useEffect(() => {
     dispatch(initializeResults(tulokset))
   }, [tulokset])
+
+  useEffect(() => {
+    dispatch(initializeUser(user))
+  }, [user])
 
   const testiAlustus = () => {
     db.ref("131AFzDNKGGOL3VON6Bi474UIEUOfZuRdLmWuWCgjJF4/TestiDBTulokset").on(
@@ -138,6 +145,7 @@ const App = () => {
       .then(() => {
         setTulokset([])
         setPankki([])
+        setUser(null)
       })
   }
 
