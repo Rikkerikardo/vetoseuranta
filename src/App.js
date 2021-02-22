@@ -10,14 +10,25 @@ import StatisticsPage from "./components/statistics/statisticspage"
 import { db } from "./config"
 import Breadcrumbs from "@material-ui/core/Breadcrumbs"
 import Button from "@material-ui/core/Button"
+import firebase from "firebase/app"
+import "firebase/database"
+import "firebase/auth"
 
 const App = () => {
   const dispatch = useDispatch()
   const [tulokset, setTulokset] = useState([])
   const [pankki, setPankki] = useState([])
+
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
-      testiAlustus()
+      firebase.auth().onAuthStateChanged((loggeduser) => {
+        if (loggeduser) {
+          console.log("logged in")
+          testiAlustus()
+        } else {
+          console.log("not logged in")
+        }
+      })
     } else {
       alustus()
     }
@@ -120,6 +131,22 @@ const App = () => {
     })
   }
 
+  const signOut = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        setTulokset([])
+        setPankki([])
+      })
+  }
+
+  const signIn = () => {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    provider.addScope("https://www.googleapis.com/auth/contacts.readonly")
+    firebase.auth().signInWithRedirect(provider)
+  }
+
   return (
     <Router>
       <Breadcrumbs separator="-" style={{ display: "flex", justifyContent: "center", padding: 10 }}>
@@ -139,6 +166,24 @@ const App = () => {
             Statistiikka
           </Button>
         </Link>
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => {
+            signOut()
+          }}
+        >
+          Kirjaudu ulos
+        </Button>
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => {
+            signIn()
+          }}
+        >
+          Kirjaudu sisään
+        </Button>
       </Breadcrumbs>
 
       <Switch>
