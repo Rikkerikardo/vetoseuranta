@@ -9,7 +9,7 @@ const Results = () => {
   const user = useSelector((state) => state.user)
 
   if (user == null) {
-    return <Container align="center">Kirjaudu sisään nähdäksesi tietoja</Container>
+    return <Container> </Container>
   } else {
     if (!matches) return <CircularProgress />
     return (

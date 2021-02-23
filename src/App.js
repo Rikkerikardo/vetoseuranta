@@ -14,20 +14,26 @@ import Button from "@material-ui/core/Button"
 import firebase from "firebase/app"
 import "firebase/database"
 import "firebase/auth"
+import LoginPage from "./components/authentication/login"
+import { Typography } from "@material-ui/core"
 
 const App = () => {
   const dispatch = useDispatch()
   const [tulokset, setTulokset] = useState([])
   const [pankki, setPankki] = useState([])
   const [user, setUser] = useState(null)
+  const [login, setLogin] = useState(false)
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
+      console.log("user", user)
+
       firebase.auth().onAuthStateChanged((loggeduser) => {
         if (loggeduser) {
-          console.log("logged in as ", loggeduser.displayName)
+          console.log("logged in as ", loggeduser.email)
           testiAlustus()
-          setUser(loggeduser)
+          setUser(loggeduser.email)
+          setLogin(true)
         } else {
           console.log("not logged in")
         }
@@ -50,6 +56,7 @@ const App = () => {
   }, [user])
 
   const testiAlustus = () => {
+    console.log("alustetaan")
     db.ref("131AFzDNKGGOL3VON6Bi474UIEUOfZuRdLmWuWCgjJF4/TestiDBTulokset").on(
       "value",
       (querySnapShot) => {
@@ -79,18 +86,14 @@ const App = () => {
       "value",
       (querySnapShot) => {
         const data = querySnapShot.val() ? querySnapShot.val() : {}
-        const aputaulukko = []
-        for (let index = 1; index < data.length; index++) {
-          const tiedot = {
-            Kassa: data[index].Kassa,
-            Riku: data[index].Riku,
-            Panu: data[index].Panu,
-            Valtteri: data[index].Valtteri,
-            Mikko: data[index].Mikko,
-          }
-          aputaulukko.push(tiedot)
+        const tiedot = {
+          Kassa: data[1].Kassa,
+          Pelaaja1: data[1].pelaaja1,
+          Pelaaja2: data[1].pelaaja2,
+          Pelaaja3: data[1].pelaaja3,
+          Pelaaja4: data[1].pelaaja4,
         }
-        setPankki(aputaulukko)
+        setPankki(tiedot)
       }
     )
   }
@@ -146,6 +149,7 @@ const App = () => {
         setTulokset([])
         setPankki([])
         setUser(null)
+        setLogin(false)
       })
   }
 
@@ -153,6 +157,7 @@ const App = () => {
     const provider = new firebase.auth.GoogleAuthProvider()
     provider.addScope("https://www.googleapis.com/auth/contacts.readonly")
     firebase.auth().signInWithRedirect(provider)
+    setLogin(true)
   }
 
   return (
@@ -192,7 +197,17 @@ const App = () => {
         >
           Kirjaudu sisään
         </Button>
+        <Link style={{ textDecoration: "none" }} to="/kirjaudu">
+          <Button variant="contained" size="small">
+            Kirjaudu sisään sposti/salasana
+          </Button>
+        </Link>
       </Breadcrumbs>
+      {login ? (
+        <Typography align="center">Kirjauduttu sisään käyttäjällä {user}</Typography>
+      ) : (
+        <Typography align="center">Kirjaudu sisään nähdäksesi tietoja</Typography>
+      )}
 
       <Switch>
         <React.Fragment>
@@ -201,6 +216,9 @@ const App = () => {
           </Route>
           <Route path="/statistiikka">
             <StatisticsPage />
+          </Route>
+          <Route path="/kirjaudu">
+            <LoginPage />
           </Route>
           <Route exact path="/">
             <HomePage />

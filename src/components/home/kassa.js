@@ -2,14 +2,14 @@ import React from "react"
 import Card from "@material-ui/core/Card"
 import CardContent from "@material-ui/core/CardContent"
 import Typography from "@material-ui/core/Typography"
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemText from "@material-ui/core/ListItemText"
 import Divider from "@material-ui/core/Divider"
 import Avatar from "@material-ui/core/Avatar"
 import CircularProgress from "@material-ui/core/CircularProgress"
-import {Paper} from "@material-ui/core"
+import { Paper } from "@material-ui/core"
 
 const Kassa = () => {
   const kassa = useSelector((state) => state.kassa)
@@ -25,7 +25,7 @@ const Kassa = () => {
     )
   }
 
-  const bank = Number(kassa[0].Kassa).toFixed(2)
+  const bank = Number(kassa.Kassa).toFixed(2)
 
   const pelaajienKassat = () => {
     return (
@@ -35,7 +35,7 @@ const Kassa = () => {
             style={{
               textAlign: "center",
             }}
-            primary={`Riku ${Number(kassa[0].Riku).toFixed(2)}€`}
+            primary={`Erkki Esimerkki ${Number(kassa.Pelaaja1).toFixed(2)}€`}
           />
         </ListItem>
         <Divider />
@@ -44,7 +44,7 @@ const Kassa = () => {
             style={{
               textAlign: "center",
             }}
-            primary={`Panu ${Number(kassa[0].Panu).toFixed(2)}€`}
+            primary={`Matti Meikäläinen ${Number(kassa.Pelaaja2).toFixed(2)}€`}
           />
         </ListItem>
         <ListItem button>
@@ -52,7 +52,7 @@ const Kassa = () => {
             style={{
               textAlign: "center",
             }}
-            primary={`Valtteri ${Number(kassa[0].Valtteri).toFixed(2)}€`}
+            primary={`Maija Meikäläinen ${Number(kassa.Pelaaja3).toFixed(2)}€`}
           />
         </ListItem>
         <Divider light />
@@ -61,7 +61,7 @@ const Kassa = () => {
             style={{
               textAlign: "center",
             }}
-            primary={`Mikko ${Number(kassa[0].Mikko).toFixed(2)}€`}
+            primary={`Mikko Mallikas ${Number(kassa.Pelaaja4).toFixed(2)}€`}
           />
         </ListItem>
       </List>
