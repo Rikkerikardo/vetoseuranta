@@ -15,7 +15,7 @@ import firebase from "firebase/app"
 import "firebase/database"
 import "firebase/auth"
 import LoginPage from "./components/authentication/login"
-import { Typography } from "@material-ui/core"
+import { Menu, MenuItem, Typography } from "@material-ui/core"
 
 const App = () => {
   const dispatch = useDispatch()
@@ -23,6 +23,7 @@ const App = () => {
   const [pankki, setPankki] = useState([])
   const [user, setUser] = useState(null)
   const [login, setLogin] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null)
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
@@ -160,6 +161,14 @@ const App = () => {
     setLogin(true)
   }
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
   return (
     <Router>
       <Breadcrumbs separator="-" style={{ display: "flex", justifyContent: "center", padding: 10 }}>
@@ -179,34 +188,58 @@ const App = () => {
             Statistiikka
           </Button>
         </Link>
-        <Button
-          variant="contained"
-          size="small"
-          onClick={() => {
-            signOut()
-          }}
-        >
-          Kirjaudu ulos
-        </Button>
-        <Button
-          variant="contained"
-          size="small"
-          onClick={() => {
-            signIn()
-          }}
-        >
-          Kirjaudu sisään
-        </Button>
-        <Link style={{ textDecoration: "none" }} to="/kirjaudu">
-          <Button variant="contained" size="small">
-            Kirjaudu sisään sposti/salasana
-          </Button>
-        </Link>
       </Breadcrumbs>
       {login ? (
         <Typography align="center">Kirjauduttu sisään käyttäjällä {user}</Typography>
       ) : (
         <Typography align="center">Kirjaudu sisään nähdäksesi tietoja</Typography>
+      )}
+      {login ? (
+        <div>
+          <Button
+            variant="contained"
+            size="small"
+            style={{ margin: "1%" }}
+            aria-haspopup="true"
+            onClick={() => {
+              signOut()
+            }}
+          >
+            Kirjaudu ulos
+          </Button>
+        </div>
+      ) : (
+        <div>
+          <Button
+            variant="contained"
+            size="small"
+            style={{ margin: "1%" }}
+            aria-haspopup="true"
+            onClick={handleClick}
+          >
+            Kirjaudu sisään
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose}>
+              <Link style={{ textDecoration: "none" }} to="/kirjaudu">
+                Kirjaudu sähköpostilla
+              </Link>
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                signIn()
+              }}
+            >
+              Kirjaudu Googlella
+            </MenuItem>
+          </Menu>
+        </div>
       )}
 
       <Switch>
