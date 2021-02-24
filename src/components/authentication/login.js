@@ -1,14 +1,24 @@
 /* eslint-disable linebreak-style */
-import React from "react"
+import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import Container from "@material-ui/core/Container"
-import { Button, TextField } from "@material-ui/core"
+import {
+  Button,
+  Dialog,
+  TextField,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@material-ui/core"
 import firebase from "firebase/app"
 import "firebase/database"
 import "firebase/auth"
 
 const LoginPage = () => {
   const user = useSelector((state) => state.user)
+  const [open, setOpen] = useState(false)
+  const [dialog, setDialog] = useState("Tuntematon virhe")
 
   const createUser = () => {
     const username = document.getElementById("username").value
@@ -21,6 +31,15 @@ const LoginPage = () => {
         const user = userCredential.user
         console.log(user)
       })
+      .catch((error) => {
+        console.log(error.message)
+        setOpen(true)
+        setDialog(error.message)
+      })
+  }
+
+  const handleClose = () => {
+    setOpen(false)
   }
 
   const logIn = () => {
@@ -33,6 +52,11 @@ const LoginPage = () => {
       .then((userCredential) => {
         const user = userCredential.user
         console.log(user)
+      })
+      .catch((error) => {
+        console.log(error.message)
+        setOpen(true)
+        setDialog(error.message)
       })
   }
 
@@ -61,6 +85,7 @@ const LoginPage = () => {
         <Button
           variant="contained"
           size="small"
+          color="secondary"
           onClick={() => {
             createUser()
           }}
@@ -73,6 +98,7 @@ const LoginPage = () => {
         <Button
           variant="contained"
           size="small"
+          color="primary"
           onClick={() => {
             logIn()
           }}
@@ -82,6 +108,17 @@ const LoginPage = () => {
         >
           Kirjaudu sisään
         </Button>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>Virhe kirjautumisessa</DialogTitle>
+          <DialogContent>
+            <DialogContentText>{dialog}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary" autoFocus>
+              Sulje
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     )
   } else {
