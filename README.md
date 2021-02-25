@@ -10,3 +10,5 @@ https://vetokone-e63f4.firebaseapp.com/
 - Firebase
 - Redux
 - Material-UI
+
+![Used hours for project](docs/tyoaikaseuranta.png)
