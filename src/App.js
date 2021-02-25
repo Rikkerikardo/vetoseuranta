@@ -197,8 +197,8 @@ const App = () => {
       {login ? (
         <div>
           <Button
-            variant="contained"
             size="small"
+            variant="outlined"
             style={{ margin: "1%" }}
             aria-haspopup="true"
             onClick={() => {
@@ -211,7 +211,7 @@ const App = () => {
       ) : (
         <div>
           <Button
-            variant="contained"
+            variant="outlined"
             size="small"
             style={{ margin: "1%" }}
             aria-haspopup="true"
