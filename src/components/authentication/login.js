@@ -14,11 +14,13 @@ import {
 import firebase from "firebase/app"
 import "firebase/database"
 import "firebase/auth"
+import { Redirect } from "react-router-dom"
 
 const LoginPage = () => {
   const user = useSelector((state) => state.user)
   const [open, setOpen] = useState(false)
   const [dialog, setDialog] = useState("Tuntematon virhe")
+  const [redirect, setRedirect] = useState(false)
 
   const createUser = () => {
     const username = document.getElementById("username").value
@@ -30,6 +32,7 @@ const LoginPage = () => {
       .then((userCredential) => {
         const user = userCredential.user
         console.log(user)
+        setRedirect(true)
       })
       .catch((error) => {
         console.log(error.message)
@@ -52,6 +55,7 @@ const LoginPage = () => {
       .then((userCredential) => {
         const user = userCredential.user
         console.log(user)
+        setRedirect(true)
       })
       .catch((error) => {
         console.log(error.message)
@@ -119,6 +123,7 @@ const LoginPage = () => {
             </Button>
           </DialogActions>
         </Dialog>
+        {redirect ? <Redirect to="/" /> : <div></div>}
       </Container>
     )
   } else {
