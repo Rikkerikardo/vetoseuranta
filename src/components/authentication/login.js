@@ -29,13 +29,10 @@ const LoginPage = () => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(username, password)
-      .then((userCredential) => {
-        const user = userCredential.user
-        console.log(user)
+      .then(() => {
         setRedirect(true)
       })
       .catch((error) => {
-        console.log(error.message)
         setOpen(true)
         setDialog(error.message)
       })
@@ -52,13 +49,10 @@ const LoginPage = () => {
     firebase
       .auth()
       .signInWithEmailAndPassword(username, password)
-      .then((userCredential) => {
-        const user = userCredential.user
-        console.log(user)
+      .then(() => {
         setRedirect(true)
       })
       .catch((error) => {
-        console.log(error.message)
         setOpen(true)
         setDialog(error.message)
       })

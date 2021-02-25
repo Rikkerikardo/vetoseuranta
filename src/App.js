@@ -40,7 +40,13 @@ const App = () => {
         }
       })
     } else {
-      alustus()
+      firebase.auth().onAuthStateChanged((loggeduser) => {
+        if (loggeduser) {
+          testiAlustus()
+          setUser(loggeduser.email)
+          setLogin(true)
+        }
+      })
     }
   }, [])
 
@@ -57,7 +63,6 @@ const App = () => {
   }, [user])
 
   const testiAlustus = () => {
-    console.log("alustetaan")
     db.ref("131AFzDNKGGOL3VON6Bi474UIEUOfZuRdLmWuWCgjJF4/TestiDBTulokset").on(
       "value",
       (querySnapShot) => {
@@ -97,49 +102,6 @@ const App = () => {
         setPankki(tiedot)
       }
     )
-  }
-
-  const alustus = () => {
-    db.ref("131AFzDNKGGOL3VON6Bi474UIEUOfZuRdLmWuWCgjJF4/DBTulokset").on(
-      "value",
-      (querySnapShot) => {
-        const data = querySnapShot.val() ? querySnapShot.val() : {}
-        const aputaulukko = []
-        for (let index = 1; index < data.length; index++) {
-          let pvm = data[index].Päivämäärä.substring(0, 10)
-          pvm = pvm.split("-").reverse().join("-")
-          const ottelu = {
-            Pelaaja1: data[index].Pelaaja1,
-            Pelaaja2: data[index].Pelaaja2,
-            Pelattu: data[index].Pelattu,
-            Panos: data[index].Panos,
-            Kerroin: data[index].Kerroin,
-            Tulos: data[index].Tulos,
-            Lopputulos: data[index].Lopputulos,
-            Turnaus: data[index].Turnaus,
-            PVM: pvm,
-            Kassa: data[index].Kassa,
-          }
-          aputaulukko.push(ottelu)
-        }
-        setTulokset(aputaulukko)
-      }
-    )
-    db.ref("131AFzDNKGGOL3VON6Bi474UIEUOfZuRdLmWuWCgjJF4/Pankki").on("value", (querySnapShot) => {
-      const data = querySnapShot.val() ? querySnapShot.val() : {}
-      const aputaulukko = []
-      for (let index = 1; index < data.length; index++) {
-        const tiedot = {
-          Kassa: data[index].Kassa,
-          Riku: data[index].Riku,
-          Panu: data[index].Panu,
-          Valtteri: data[index].Valtteri,
-          Mikko: data[index].Mikko,
-        }
-        aputaulukko.push(tiedot)
-      }
-      setPankki(aputaulukko)
-    })
   }
 
   const signOut = () => {
@@ -263,3 +225,46 @@ const App = () => {
 }
 
 export default App
+
+/*  const alustus = () => {
+    db.ref("131AFzDNKGGOL3VON6Bi474UIEUOfZuRdLmWuWCgjJF4/DBTulokset").on(
+      "value",
+      (querySnapShot) => {
+        const data = querySnapShot.val() ? querySnapShot.val() : {}
+        const aputaulukko = []
+        for (let index = 1; index < data.length; index++) {
+          let pvm = data[index].Päivämäärä.substring(0, 10)
+          pvm = pvm.split("-").reverse().join("-")
+          const ottelu = {
+            Pelaaja1: data[index].Pelaaja1,
+            Pelaaja2: data[index].Pelaaja2,
+            Pelattu: data[index].Pelattu,
+            Panos: data[index].Panos,
+            Kerroin: data[index].Kerroin,
+            Tulos: data[index].Tulos,
+            Lopputulos: data[index].Lopputulos,
+            Turnaus: data[index].Turnaus,
+            PVM: pvm,
+            Kassa: data[index].Kassa,
+          }
+          aputaulukko.push(ottelu)
+        }
+        setTulokset(aputaulukko)
+      }
+    )
+    db.ref("131AFzDNKGGOL3VON6Bi474UIEUOfZuRdLmWuWCgjJF4/Pankki").on("value", (querySnapShot) => {
+      const data = querySnapShot.val() ? querySnapShot.val() : {}
+      const aputaulukko = []
+      for (let index = 1; index < data.length; index++) {
+        const tiedot = {
+          Kassa: data[index].Kassa,
+          Riku: data[index].Riku,
+          Panu: data[index].Panu,
+          Valtteri: data[index].Valtteri,
+          Mikko: data[index].Mikko,
+        }
+        aputaulukko.push(tiedot)
+      }
+      setPankki(aputaulukko)
+    })
+  } */
